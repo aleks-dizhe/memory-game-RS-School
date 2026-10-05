@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Memory game</title>
+    <style>
+
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            background-color: lightgreen;
+            height: 70px;
+        }
+
+        button {
+            padding: 10px 20px; 
+            font-size: 16px;
+        }
+
+        body {
+            background-color: white;
+        }
+
+        .board {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .card img { display: none; }
+
+        .card.visible img { display: block; }
+
+        .modal-overlay {
+            position: fixed; 
+            top: 0; 
+            left: 0; 
+            width: 100vw; 
+            height: 100vh; 
+            background-color: rgba(0, 0, 0, 0.5);
+            overflow: hidden;
+        }
+
+        .esc-button {
+            height: 50px;
+            width: 100px;
+        }
+
+    </style>
+</head>
+<body>
+    <script src="main.js"></script>
+</body>
+</html>
