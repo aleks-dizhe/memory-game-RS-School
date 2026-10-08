@@ -103,8 +103,7 @@ const cards = [
 ]
 
 const stats = [];
-
-const statsSorted = stats.sort((a, b) => a.steps - b.steps);
+const statsSorted = ([...stats].sort((a, b) => a.steps - b.steps)).slice(0, 10);
 
 
 
@@ -144,6 +143,32 @@ function renderHeader() {
 
 
 };
+
+//Generate a modal window
+function showModal(content) {
+    const modalDark = document.createElement('div');
+    modalDark.classList.add('modal-overlay');
+    document.body.appendChild(modalDark);
+    modalDark.appendChild(content);
+
+    const escButton = document.createElement('button');
+    escButton.textContent = 'Close';
+    escButton.addEventListener('click', ()=>{
+            closeModal();
+        })
+    modalDark.appendChild(escButton);
+        //Close a modal window
+        function closeModal() {
+        document.body.style.overflow = '';
+        //document.removeEventListener('keydown', ...);
+        modalDark.remove();
+
+}
+    return closeModal;
+
+}
+
+
 
 //Cards generation
 function generateCards() {
@@ -259,56 +284,38 @@ let isLocked = false;
 
 
     function victory() {
-    
-        const modalDark = document.createElement('div');
-        modalDark.classList.add('modal-overlay');
-        document.body.appendChild(modalDark);
-        const newGameModal = document.createElement('button');
-        newGameModal.textContent = 'New Game';
-
-        newGameModal.addEventListener('click', () => {
-            newGame();
-            modalDark.remove();
-        });
-
-        modalDark.appendChild(newGameModal);
-
-        const escButton = document.createElement('button');
-        escButton.textContent = 'Close';
-        escButton.addEventListener('click', ()=>{
-            modalDark.remove();
-        })
-        escButton.classList.add('esc-button');
-        modalDark.appendChild(escButton);
-
+        
+        const content = document.createElement('div');
+        
         const victoryText = document.createElement('h1');
         victoryText.textContent = 'YOU WIN!';
-        modalDark.appendChild(victoryText);
+        content.appendChild(victoryText);
 
-        let date = new Date;
+        const newGameButton = document.createElement('button');
+        newGameButton.textContent = 'New Game';
+        
+        content.appendChild(newGameButton);
+
+        let date = new Date();
         date = (date.getDate().toString().padStart(2, '0')) + '.'
         + ((date.getMonth() + 1).toString().padStart(2, '0')) + '.'
         + (date.getFullYear().toString());
+
         stats.push({steps: steps, date: date});
 
-
-
-        /*finalWinsText = document.createElement('h2');
-        finalWinsText.textContent = wins;
-        finalStepsText = document.createElement('h2');
-        finalStepsText.textContent = steps;
-        modalDark.appendChild(finalWinsText);
-        modalDark.appendChild(finalStepsText);*/
-
-
-
+        const closeModal = showModal(content);
+        
+        newGameButton.addEventListener('click', () => {
+            newGame();
+            closeModal();
+        });        
+        
     }
 
     function newGame() {
         const board = document.querySelector('.board');
-        console.log(board);
-       board.remove();
-       shuffle(cards);
+        board.remove();
+        shuffle(cards);
         generateCards();
         wins = 0;
         steps = 0;
@@ -318,6 +325,12 @@ let isLocked = false;
         updateScores();
     }
 
+    function generateRating() {
+        for (const item of statsSorted) {
+            const place = document.createElement('h2');
+            place.textContent = item;
+        }
+    };
 
 
 
@@ -327,13 +340,13 @@ let isLocked = false;
 function shuffle(array) {
   var m = array.length, t, i;
 
-  // While there remain elements to shuffle…
+  // While there remain elements to shuffle
   while (m) {
 
-    // Pick a remaining element…
+    // Pick a remaining element
     i = Math.floor(Math.random() * m--);
 
-    // And swap it with the current element.
+    // And swap it with the current element
     t = array[m];
     array[m] = array[i];
     array[i] = t;
